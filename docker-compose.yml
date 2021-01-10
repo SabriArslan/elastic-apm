@@ -6,8 +6,8 @@ services:
     container_name: apm-elasticsearch
     restart: unless-stopped
     network_mode: bridge
-    expose:
-      - 9200
+    ports:
+      - 9200:9200
     volumes:
       - ./elasticsearch_data:/usr/share/elasticsearch/data
       - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
