@@ -1,4 +1,4 @@
-#How to use
+# How to use
 1. generate SSL certificates by running cert-gen docker-compose container
 ```
 cd cert-gen
