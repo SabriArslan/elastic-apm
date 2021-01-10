@@ -66,11 +66,11 @@ apm-server:
 
     # Path to file containing the certificate for server authentication.
     # Needs to be configured when ssl is enabled.
-    #certificate: ''
+    #certificate: '/usr/share/apm-server/certs/apm-server/apm-server.crt'
 
     # Path to file containing server certificate key.
     # Needs to be configured when ssl is enabled.
-    #key: ''
+    #key: '/usr/share/apm-server/certs/apm-server/apm-server.key'
 
     # Optional configuration options for ssl communication.
 
