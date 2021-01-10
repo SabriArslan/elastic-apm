@@ -39,30 +39,26 @@ services:
     network_mode: bridge
     expose:
       - 8200
-    user: apm-server
+    #user: apm-server
     command: [
          "apm-server",
          "-e",
          "-E", "output.elasticsearch.username=elastic",
          "-E", "output.elasticsearch.password=7Xi4QNfIhfINUQNWSDty",
-         "-E", "output.elasticsearch.ssl.certificate_authorities=/usr/share/apm-server/certs/ca/ca.crt",
-         "-E", "output.elasticsearch.ssl.certificate=/usr/share/apm-server/certs/apm-server/apm-server.crt",
-         "-E", "output.elasticsearch.ssl.key=/usr/share/apm-server/certs/apm-server/apm-server.key",
-         "-E", "setup.kibana.user=kibana",
-         "-E", "setup.kibana.password=sO9Jkc2mhlQB5kKjePCB"
+         "-E", "apm-server.kibana.username=apm_system",
+         "-E", "apm-server.kibana.password=K3AD9BvLKvXY8x2cu71v"
     ]
     environment:
-      - output.elasticsearch.hosts=['https://elasticsearch:9200']
       - apm-server.host="0.0.0.0:8200"
       - apm-server.secret_token="qV2qwpXCVDYzkqCBWybTEDVcj9h5Qazm2v643U5sZNXVqwgB6An4ThUu5r64"
-      - setup.kibana.host="kibana:50601"
       - setup.template.enabled=true
       - logging.to_files=false
     volumes:
+      - ./apm-server.yml:/usr/share/apm-server/apm-server.yml
       - ./certs:/usr/share/apm-server/certs
     links:
       - apm-elasticsearch:elasticsearch
-      - apm-kibana
+      - apm-kibana:kibana
     depends_on:
       - apm-elasticsearch
       - apm-kibana
