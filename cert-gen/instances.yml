@@ -1,0 +1,16 @@
+instances:
+  - name: es01
+    dns:
+      - es01
+      - elasticsearch
+      - apm-elasticsearch
+      - localhost
+  - name: apm-kibana
+    dns:
+      - apm-kibana
+      - kibana
+      - localhost
+  - name: apm-server
+    dns:
+      - apm-server
+      - localhost

@@ -1,0 +1,68 @@
+version: '3.7'
+
+services:
+  apm-elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.7.1
+    container_name: apm-elasticsearch
+    restart: unless-stopped
+    network_mode: bridge
+    expose:
+      - 9200
+    volumes:
+      - ./elasticsearch_data:/usr/share/elasticsearch/data
+      - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./certs:/usr/share/elasticsearch/config/certificates
+    environment:
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+
+  apm-kibana:
+    image: docker.elastic.co/kibana/kibana:7.7.1
+    container_name: apm-kibana
+    restart: unless-stopped
+    network_mode: bridge
+    environment:
+      - SERVER_HOST=0.0.0.0
+    volumes:
+      - ./kibana.yml:/usr/share/kibana/config/kibana.yml
+      - ./certs:/usr/share/kibana/config/certs
+    ports:
+      - 50601:5601
+    links:
+      - apm-elasticsearch:elasticsearch
+    depends_on:
+      - apm-elasticsearch
+
+  apm-server:
+    image: docker.elastic.co/apm/apm-server:7.7.1
+    container_name: apm-server
+    restart: unless-stopped
+    network_mode: bridge
+    expose:
+      - 8200
+    user: apm-server
+    command: [
+         "apm-server",
+         "-e",
+         "-E", "output.elasticsearch.username=elastic",
+         "-E", "output.elasticsearch.password=7Xi4QNfIhfINUQNWSDty",
+         "-E", "output.elasticsearch.ssl.certificate_authorities=/usr/share/apm-server/certs/ca/ca.crt",
+         "-E", "output.elasticsearch.ssl.certificate=/usr/share/apm-server/certs/apm-server/apm-server.crt",
+         "-E", "output.elasticsearch.ssl.key=/usr/share/apm-server/certs/apm-server/apm-server.key",
+         "-E", "setup.kibana.user=kibana",
+         "-E", "setup.kibana.password=sO9Jkc2mhlQB5kKjePCB"
+    ]
+    environment:
+      - output.elasticsearch.hosts=['https://elasticsearch:9200']
+      - apm-server.host="0.0.0.0:8200"
+      - apm-server.secret_token="qV2qwpXCVDYzkqCBWybTEDVcj9h5Qazm2v643U5sZNXVqwgB6An4ThUu5r64"
+      - setup.kibana.host="kibana:50601"
+      - setup.template.enabled=true
+      - logging.to_files=false
+    volumes:
+      - ./certs:/usr/share/apm-server/certs
+    links:
+      - apm-elasticsearch:elasticsearch
+      - apm-kibana
+    depends_on:
+      - apm-elasticsearch
+      - apm-kibana

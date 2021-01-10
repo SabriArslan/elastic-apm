@@ -1,0 +1,9 @@
+server.name: apm-kibana
+server.host: "0"
+server.ssl.enabled: true
+server.ssl.certificate: /usr/share/kibana/config/certs/apm-kibana/apm-kibana.crt
+server.ssl.key: /usr/share/kibana/config/certs/apm-kibana/apm-kibana.key
+elasticsearch.hosts: [ "https://elasticsearch:9200" ]
+elasticsearch.username: kibana
+elasticsearch.password: sO9Jkc2mhlQB5kKjePCB
+elasticsearch.ssl.certificateAuthorities: [ "/usr/share/kibana/config/certs/ca/ca.crt" ]

@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  create_certs:
+    container_name: create_certs
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.7.1
+    command: >
+      bash -c '
+        if [[ ! -d config/certificates/certs ]]; then
+          mkdir config/certificates/certs;
+        fi;
+        if [[ ! -f /certs/bundle.zip ]]; then
+          bin/elasticsearch-certgen --silent --p12 --in /instances.yml --out config/certificates/certs/bundle.zip;
+          unzip config/certificates/certs/bundle.zip -d config/certificates/certs;
+          unzip config/certificates/certs/bundle.zip -d /certs;
+        fi;
+        chgrp -R 0 config/certificates/certs
+        chgrp -R 0 /certs
+        chown -R 1000:0 config/certificates/certs
+        chown -R 1000:0 /certs
+      '
+    user: "0"
+    working_dir: /usr/share/elasticsearch
+    volumes: 
+      - ../certs:/certs
+      - ./certificates:/usr/share/elasticsearch/config/certificates
+      - ./instances.yml:/instances.yml
