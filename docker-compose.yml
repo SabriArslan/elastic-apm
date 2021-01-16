@@ -5,15 +5,17 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.7.1
     container_name: apm-elasticsearch
     restart: unless-stopped
-    network_mode: bridge
     ports:
       - 9200:9200
+      - 9300:9300
     volumes:
       - ./elasticsearch_data:/usr/share/elasticsearch/data
       - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - ./certs:/usr/share/elasticsearch/config/certificates
     environment:
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    networks:
+      - elknetwork
     logging:
         driver: "json-file"
         options:
@@ -24,7 +26,6 @@ services:
     image: docker.elastic.co/kibana/kibana:7.7.1
     container_name: apm-kibana
     restart: unless-stopped
-    network_mode: bridge
     environment:
       - SERVER_HOST=0.0.0.0
     volumes:
@@ -36,6 +37,8 @@ services:
       - apm-elasticsearch:elasticsearch
     depends_on:
       - apm-elasticsearch
+    networks:
+      - elknetwork
     logging:
         driver: "json-file"
         options:
@@ -46,7 +49,6 @@ services:
     image: docker.elastic.co/apm/apm-server:7.7.1
     container_name: apm-server
     restart: unless-stopped
-    network_mode: bridge
     ports:
       - 8200:8200
     command: [
@@ -71,8 +73,35 @@ services:
     depends_on:
       - apm-elasticsearch
       - apm-kibana
+    networks:
+      - elknetwork
     logging:
         driver: "json-file"
         options:
             max-file: "5"
             max-size: "10m"
+
+  logstash:
+    image: logstash:7.7.1
+    container_name: logstash
+    ports:
+      - 9600:9600
+      - 8089:8089
+    volumes:
+      - ./logstash:/usr/share/logstash/pipeline/
+      - ./certs:/etc/logstash/certs
+    links:
+      - apm-elasticsearch:elasticsearch
+    depends_on:
+      - apm-elasticsearch
+    networks:
+      - elknetwork
+    logging:
+        driver: "json-file"
+        options:
+            max-file: "5"
+            max-size: "10m"
+
+networks:
+    elknetwork:
+        driver: bridge
