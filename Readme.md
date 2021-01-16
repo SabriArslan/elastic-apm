@@ -25,6 +25,14 @@ apm-server.kibana.password={apm_system user password}
 ```
 elasticsearch.password: {kibana user password}
 ```
+- logstash.yml
+```
+xpack.monitoring.elasticsearch.password: '{elasticsearch user password}'
+```
+- logstash/logstash.conf
+```
+password => "{elasticsearch user password}"
+```
 5. restart containers
 ```
 docker-compose down

@@ -9,7 +9,7 @@ services:
         if [[ ! -d config/certificates/certs ]]; then
           mkdir config/certificates/certs;
         fi;
-        if [[ ! -f /certs/bundle.zip ]]; then
+        if [[ ! -f config/certificates/certs/bundle.zip ]]; then
           bin/elasticsearch-certgen --silent --p12 --in /instances.yml --out config/certificates/certs/bundle.zip;
           unzip config/certificates/certs/bundle.zip -d config/certificates/certs;
           unzip config/certificates/certs/bundle.zip -d /certs;

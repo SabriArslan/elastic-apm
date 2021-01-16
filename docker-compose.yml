@@ -32,7 +32,7 @@ services:
       - ./kibana.yml:/usr/share/kibana/config/kibana.yml
       - ./certs:/usr/share/kibana/config/certs
     ports:
-      - 50601:5601
+      - 5601:5601
     links:
       - apm-elasticsearch:elasticsearch
     depends_on:
@@ -55,13 +55,13 @@ services:
          "apm-server",
          "-e",
          "-E", "output.elasticsearch.username=elastic",
-         "-E", "output.elasticsearch.password=7Xi4QNfIhfINUQNWSDty",
+         "-E", "output.elasticsearch.password=I9wwOY3LLBSj4flOSdq4",
          "-E", "apm-server.kibana.username=apm_system",
-         "-E", "apm-server.kibana.password=K3AD9BvLKvXY8x2cu71v"
+         "-E", "apm-server.kibana.password=qElVXDxc8SGYAYH1P1d0"
     ]
     environment:
       - apm-server.host="0.0.0.0:8200"
-      - apm-server.secret_token="qV2qwpXCVDYzkqCBWybTEDVcj9h5Qazm2v643U5sZNXVqwgB6An4ThUu5r64"
+      - apm-server.secret_token="K6yf2WHSSSaffFXudX2tcU4qgJE5XnxTDM4RtsHhKtDVEVgKBa8hc89KpXbC"
       - setup.template.enabled=true
       - logging.to_files=false
     volumes:
@@ -81,14 +81,19 @@ services:
             max-file: "5"
             max-size: "10m"
 
-  logstash:
+  apm-logstash:
     image: logstash:7.7.1
-    container_name: logstash
+    container_name: apm-logstash
+    restart: unless-stopped
     ports:
       - 9600:9600
       - 8089:8089
+      - 8080:8080
+      - 5044:5044
+      - 5000:5000
     volumes:
-      - ./logstash:/usr/share/logstash/pipeline/
+      - ./logstash:/usr/share/logstash/pipeline
+      - ./logstash.yml:/usr/share/logstash/config/logstash.yml
       - ./certs:/etc/logstash/certs
     links:
       - apm-elasticsearch:elasticsearch

@@ -13,7 +13,7 @@ instances:
   - name: apm-server
     dns:
       - apm-server
-      - localhost
+      - apm
       - localhost
   - name: logstash
     dns:

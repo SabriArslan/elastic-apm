@@ -1,0 +1,5 @@
+xpack.monitoring.enabled: true
+xpack.monitoring.elasticsearch.username: logstash_system
+xpack.monitoring.elasticsearch.password: 'DlWhdDItEMpf1PMWJTMV'
+xpack.monitoring.elasticsearch.hosts: [ 'https://elasticsearch:9200' ]
+xpack.monitoring.elasticsearch.ssl.certificate_authority: /etc/logstash/certs/ca/ca.crt
