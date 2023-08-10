@@ -5,6 +5,6 @@ server.ssl.certificate: /usr/share/kibana/config/certs/apm-kibana/apm-kibana.crt
 server.ssl.key: /usr/share/kibana/config/certs/apm-kibana/apm-kibana.key
 elasticsearch.hosts: [ "https://elasticsearch:9200" ]
 elasticsearch.username: kibana
-elasticsearch.password: 6JNCf2WvQRGY12GFKt3Y
+elasticsearch.password: {kibana user password}
 elasticsearch.ssl.certificateAuthorities: [ "/usr/share/kibana/config/certs/ca/ca.crt" ]
-xpack.encryptedSavedObjects.encryptionKey: "xgZqtYjErnCR3YxywG33SPz44r38K4QSQAxQ9AsXTqbAZB7XNes3MXSjg96U"
+xpack.encryptedSavedObjects.encryptionKey: "{very strong secret dont share with anyone}"
