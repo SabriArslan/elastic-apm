@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   apm-elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.10
+    image: elasticsearch:8.8.1
     container_name: apm-elasticsearch
     restart: unless-stopped
     ports:
@@ -23,7 +23,7 @@ services:
             max-size: "10m"
 
   apm-kibana:
-    image: docker.elastic.co/kibana/kibana:7.17.10
+    image: kibana:8.8.1
     container_name: apm-kibana
     restart: unless-stopped
     environment:
@@ -46,7 +46,7 @@ services:
             max-size: "10m"
 
   apm-server:
-    image: docker.elastic.co/apm/apm-server:7.17.10
+    image: elastic/apm-server:8.8.1
     container_name: apm-server
     restart: unless-stopped
     ports:
@@ -82,7 +82,7 @@ services:
             max-size: "10m"
 
   apm-logstash:
-    image: logstash:7.17.10
+    image: logstash:8.8.1
     container_name: apm-logstash
     restart: unless-stopped
     ports:
